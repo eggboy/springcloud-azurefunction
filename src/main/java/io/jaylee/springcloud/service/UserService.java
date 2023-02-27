@@ -18,12 +18,12 @@ public class UserService {
 
     public String saveUser(UserDTO userDTO) {
         var user = User.builder()
-                        .userId(userDTO.userId())
-                        .lastName(userDTO.lastName())
-                        .firstName(userDTO.firstName())
-                        .email(userDTO.email())
-                        .createdOn(ZonedDateTime.now())
-                        .build();
+                       .userId(userDTO.getUserId())
+                       .lastName(userDTO.getLastName())
+                       .firstName(userDTO.getFirstName())
+                       .email(userDTO.getEmail())
+                       .createdOn(ZonedDateTime.now())
+                       .build();
 
         return userRepository.save(user).getUserId();
     }
@@ -31,9 +31,7 @@ public class UserService {
     public UserDTO getUser(String userId) {
         var user = userRepository.findById(userId).orElse(new User());
 
-        var userDTO = new UserDTO(user.getUserId(),
-                                      user.getLastName(), user.getFirstName(), user.getEmail());
-
-        return userDTO;
+        return new UserDTO(user.getUserId(),
+                           user.getLastName(), user.getFirstName(), user.getEmail());
     }
 }
