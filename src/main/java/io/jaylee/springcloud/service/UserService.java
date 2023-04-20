@@ -18,10 +18,10 @@ public class UserService {
 
     public String saveUser(UserDTO userDTO) {
         var user = User.builder()
-                        .userId(userDTO.userId())
-                        .lastName(userDTO.lastName())
-                        .firstName(userDTO.firstName())
-                        .email(userDTO.email())
+                        .userId(userDTO.getUserId())
+                        .lastName(userDTO.getLastName())
+                        .firstName(userDTO.getFirstName())
+                        .email(userDTO.getEmail())
                         .createdOn(ZonedDateTime.now())
                         .build();
 
