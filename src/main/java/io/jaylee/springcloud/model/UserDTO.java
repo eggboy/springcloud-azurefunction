@@ -14,5 +14,3 @@ public class UserDTO {
     String firstName;
     String email;
 }
-
-

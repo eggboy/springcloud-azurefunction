@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.9</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>io.jaylee</groupId>
-    <artifactId>springcloud</artifactId>
+    <groupId>io.jaylee.springcloud</groupId>
+    <artifactId>azurefunction</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>azurefunction</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
 
         <functionResourceGroup>function-rg</functionResourceGroup>
         <functionAppServicePlanName>spring-function-service-plan</functionAppServicePlanName>
@@ -24,26 +25,25 @@
         <functionPricingTier>Y1</functionPricingTier>
 
         <start-class>io.jaylee.springcloud.AzurefunctionApplication</start-class>
+
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-adapter-azure</artifactId>
-            <version>4.0.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-function-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-context</artifactId>
+            <artifactId>spring-cloud-function-adapter-azure</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -69,29 +69,15 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure.functions</groupId>
-                <artifactId>azure-functions-java-library</artifactId>
-                <version>3.0.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.microsoft.azure</groupId>
-                    <artifactId>azure-functions-maven-plugin</artifactId>
-                    <version>1.23.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>1.33.0</version>
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
@@ -99,8 +85,10 @@
                     <appServicePlanName>${functionAppServicePlanName}</appServicePlanName>
                     <pricingTier>${functionPricingTier}</pricingTier>
 
-                    <hostJson>${project.basedir}/host.json</hostJson>
-                    <localSettingsJson>${project.basedir}/local.settings.json</localSettingsJson>
+                    <hostJson>${project.basedir}/src/main/resources/host.json</hostJson>
+                    <localSettingsJson>
+                        ${project.basedir}/src/main/resources/local.settings.json
+                    </localSettingsJson>
 
                     <runtime>
                         <os>linux</os>
@@ -134,6 +122,13 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot.experimental</groupId>
+                        <artifactId>spring-boot-thin-layout</artifactId>
+                        <version>1.0.31.RELEASE</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

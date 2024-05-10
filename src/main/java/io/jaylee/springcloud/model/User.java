@@ -1,10 +1,10 @@
 package io.jaylee.springcloud.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
 @Entity
