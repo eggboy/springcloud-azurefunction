@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Azure Functions ###
+local.settings.json
+obj/
+bin/
