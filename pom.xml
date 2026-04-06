@@ -127,7 +127,6 @@
         <profile>
             <id>deploy</id>
             <properties>
-                <functionAppName>springcloud-azurefunction</functionAppName>
                 <functionAppRegion>koreacentral</functionAppRegion>
                 <functionResourceGroup>java-functions-group</functionResourceGroup>
             </properties>
