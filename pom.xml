@@ -16,6 +16,13 @@
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2025.0.2</spring-cloud.version>
+        <spring-boot-thin-layout.version>1.0.31.RELEASE</spring-boot-thin-layout.version>
+        <spring-cloud-function-adapter-azure-web.version>5.0.1</spring-cloud-function-adapter-azure-web.version>
+        <start-class>io.jaylee.springcloud.AzurefunctionApplication</start-class>
+        <azure.functions.maven.plugin.version>1.41.0</azure.functions.maven.plugin.version>
+        <functionAppName>springcloud-azurefunction</functionAppName>
+        <functionAppRegion>koreacentral</functionAppRegion>
+        <functionResourceGroup>java-functions-group</functionResourceGroup>
     </properties>
     <dependencies>
         <dependency>
@@ -28,7 +35,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-context</artifactId>
+            <artifactId>spring-cloud-function-adapter-azure-web</artifactId>
+            <version>${spring-cloud-function-adapter-azure-web.version}</version>
         </dependency>
 
         <dependency>
@@ -62,6 +70,43 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-functions-maven-plugin</artifactId>
+                <version>${azure.functions.maven.plugin.version}</version>
+                <configuration>
+                    <appName>${functionAppName}</appName>
+                    <resourceGroup>${functionResourceGroup}</resourceGroup>
+                    <region>${functionAppRegion}</region>
+                    <hostJson>${project.basedir}/src/main/resources/host.json</hostJson>
+                    <runtime>
+                        <os>linux</os>
+                        <javaVersion>21</javaVersion>
+                    </runtime>
+                    <funcPort>7072</funcPort>
+                    <appSettings>
+                        <property>
+                            <name>FUNCTIONS_EXTENSION_VERSION</name>
+                            <value>~4</value>
+                        </property>
+                    </appSettings>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>package-functions</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -72,6 +117,13 @@
                         </exclude>
                     </excludes>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.boot.experimental</groupId>
+                        <artifactId>spring-boot-thin-layout</artifactId>
+                        <version>${spring-boot-thin-layout.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
