@@ -34,5 +34,14 @@ curl -X GET http://localhost:7072/api/AzureWebAdapter/user/1
 
 ```shell
 az login
-mvn azure-functions:deploy
+mvn azure-functions:deploy -Pdeploy
+```
+
+You can override the default Azure resource settings with `-D` flags:
+
+```shell
+mvn azure-functions:deploy -Pdeploy \
+  -DfunctionAppName=my-app \
+  -DfunctionAppRegion=westus \
+  -DfunctionResourceGroup=my-resource-group
 ```

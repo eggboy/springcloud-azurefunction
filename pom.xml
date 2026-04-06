@@ -17,12 +17,10 @@
         <java.version>21</java.version>
         <spring-cloud.version>2025.0.2</spring-cloud.version>
         <spring-boot-thin-layout.version>1.0.31.RELEASE</spring-boot-thin-layout.version>
-        <spring-cloud-function-adapter-azure-web.version>5.0.1</spring-cloud-function-adapter-azure-web.version>
         <start-class>io.jaylee.springcloud.AzurefunctionApplication</start-class>
         <azure.functions.maven.plugin.version>1.41.0</azure.functions.maven.plugin.version>
+        <!-- Azure resource defaults for local packaging; override with -D flags or the 'deploy' profile -->
         <functionAppName>springcloud-azurefunction</functionAppName>
-        <functionAppRegion>koreacentral</functionAppRegion>
-        <functionResourceGroup>java-functions-group</functionResourceGroup>
     </properties>
     <dependencies>
         <dependency>
@@ -36,7 +34,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-azure-web</artifactId>
-            <version>${spring-cloud-function-adapter-azure-web.version}</version>
         </dependency>
 
         <dependency>
@@ -82,8 +79,6 @@
                 <version>${azure.functions.maven.plugin.version}</version>
                 <configuration>
                     <appName>${functionAppName}</appName>
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
-                    <region>${functionAppRegion}</region>
                     <hostJson>${project.basedir}/src/main/resources/host.json</hostJson>
                     <runtime>
                         <os>linux</os>
@@ -127,5 +122,29 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <properties>
+                <functionAppName>springcloud-azurefunction</functionAppName>
+                <functionAppRegion>koreacentral</functionAppRegion>
+                <functionResourceGroup>java-functions-group</functionResourceGroup>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.microsoft.azure</groupId>
+                        <artifactId>azure-functions-maven-plugin</artifactId>
+                        <configuration>
+                            <appName>${functionAppName}</appName>
+                            <resourceGroup>${functionResourceGroup}</resourceGroup>
+                            <region>${functionAppRegion}</region>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
